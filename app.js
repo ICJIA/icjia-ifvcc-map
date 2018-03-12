@@ -77,18 +77,18 @@ var app = new Vue({
       return;
     },
     initializeChart: function initializeChart() {
-      this.renderChart(this, this.setChartEvents(this));
+      this.renderChart(this, this.setChartEvents());
     },
     getSelection: function getSelection(e) {
       this.selected = "" + e.target.value;
       this.countyMetaData = this.getCountyMetaData("id", this.selected);
-      this.loadFactSheet(this.countyMetaData.title);
+      this.loadFactSheet();
     },
 
     getFirstFactSheet: function getFirstFactSheet() {
       this.selected = this.fm.data[0].id;
       this.countyMetaData = this.getCountyMetaData("id", this.selected);
-      this.loadFactSheet(this.countyMetaData.title);
+      this.loadFactSheet();
     },
 
     getCountyMetaData: function getCountyMetaData(key, value) {
@@ -105,7 +105,7 @@ var app = new Vue({
       }
       return myObj;
     },
-    loadFactSheet: function loadFactSheet(t) {
+    loadFactSheet: function loadFactSheet() {
       var _this = this;
 
       this.visibility = true;
@@ -113,7 +113,7 @@ var app = new Vue({
       var siteUrl = "https://adultredeployil.us/sites/site-001";
       console.log("Site url for factsheet: ", siteUrl);
       this.countyMetaData.factSheet =
-        '<div class="text-center" style="margin-top: 30px"></div>';
+        '<div class="text-center" style="margin-top: 30px">Loading... <img src="img/spinner.svg" /></div>';
       axios
         .get(siteUrl)
         .then(function(response) {
@@ -127,18 +127,16 @@ var app = new Vue({
     },
     renderFactSheet: function renderFactSheet(str) {
       this.countyMetaData.factSheet = str;
-      $(".panel-text").html(str);
+      //$(".panel-text").html(str);
       this.$forceUpdate();
     },
-    setChartEvents: function setChartEvents(vm) {
+    setChartEvents: function setChartEvents() {
       var _this = this;
       var fusionEventsObj = {
         entityClick: function entityClick(evt, data) {
           _this.countyId = data.id;
-
           var metaData = _this.getCountyMetaData("id", _this.countyId);
           //console.log(metaData.displayValue)
-
           if (metaData.displayValue != "") {
             _this.countyMetaData = metaData;
             _this.visibility = true;
@@ -149,7 +147,7 @@ var app = new Vue({
       };
       return fusionEventsObj;
     },
-    renderChart: function renderChart(context, fusionEventsObj) {
+    renderChart: function renderChart(_this, fusionEventsObj) {
       FusionCharts.ready(function() {
         this.ariMap = new FusionCharts({
           type: "illinois",
@@ -158,9 +156,9 @@ var app = new Vue({
           height: "700",
           events: fusionEventsObj,
           dataSource: {
-            chart: context.fm.chart,
-            colorrange: context.fm.colorrange,
-            data: context.fm.data
+            chart: _this.fm.chart,
+            colorrange: _this.fm.colorrange,
+            data: _this.fm.data
           }
         }).render();
       });
@@ -171,12 +169,10 @@ var app = new Vue({
 
     return {
       selected: "",
-      selected2: "",
       countyId: "",
       visibility: false,
       countyMetaData: {},
       selectData: [],
-      testData: [],
       fm: {
         chart: ((_chart = {
           caption: "Adult Redeploy Illinois SFY 2017",

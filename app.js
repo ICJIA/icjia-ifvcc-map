@@ -80,12 +80,6 @@ var app = new Vue({
       this.loadFactSheet(this.countyMetaData.title);
     },
 
-    getFirstFactSheet: function getFirstFactSheet() {
-      this.selected = this.fm.data[0].id;
-      this.countyMetaData = this.getCountyMetaData("id", this.selected);
-      this.loadFactSheet(this.countyMetaData.title);
-    },
-
     getCountyMetaData: function getCountyMetaData(key, value) {
       var myObj;
       if (key === "title") {
@@ -122,7 +116,7 @@ var app = new Vue({
     },
     renderFactSheet: function renderFactSheet(str) {
       this.countyMetaData.factSheet = str;
-      $(".panel-text").html(str);
+      //$(".panel-text").html(str);
       this.$forceUpdate();
     },
     setChartEvents: function setChartEvents(_this) {

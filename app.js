@@ -1,84 +1,70 @@
+"use strict";
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+  return obj;
+}
+
 Vue.use(VueFusionCharts);
 
 Vue.component("about", {
-  template: `<div class="about-redeploy">
-  <h1 class="h2" style="padding-bottom: 12px; border-bottom: 1px solid #ddd;">About Adult Redeploy Illinois</h1>
-  <p>ARI was established by the
-    <a href="http://www.ilga.gov/legislation/publicacts/fulltext.asp?Name=096-0761">Crime Reduction Act</a> (Public Act 96-0761) to provide financial incentives to local jurisdictions for programs that
-    allow diversion of non-violent offenders from state prisons by providing community-based services. Grants are provided
-    to counties, groups of counties, and judicial circuits to increase programming in their areas, in exchange for reducing
-    the number of people they send to the Illinois Department of Corrections.</p>
-
-  <p>The Crime Reduction Act is based on the premise that crime can be reduced and the costs of the criminal justice system
-    can be controlled by understanding and addressing the reasons why people commit crimes. It is also based on the premise
-    that local jurisdictions (judicial circuits or counties) know best what resources are necessary to reduce crime. Rigorous
-    evaluation processes with standardized performance measurements are required to confirm the effectiveness of services
-    in reducing crime. </p>
-
-  <p>ARI is modeled after the successful juvenile Redeploy Illinois program operating since 2005. ARI is an example of the
-    “performance incentive funding” best practice, intended to align fiscal and operational responsibility for non-violent
-    offenders at the local level to produce better public safety at a lower cost. ARI draws on concepts of justice reinvestment,
-    such as using data to implement strategies that drive down corrections costs and free up dollars for investment in
-    community-based programs addressing recidivism.</p>
-
-  <p>The goals of ARI are to:</p>
-  <ul>
-    <li>Reduce crime and recidivism in a way that is cost effective for taxpayers.</li>
-    <li>Provide financial incentives to counties or judicial circuits to create effective local-level evidence-based services.</li>
-    <li>Encourage the successful local supervision of eligible offenders and their reintegration into the locality.</li>
-    <li>Perform rigorous data collection and analysis to assess the outcomes of the programs.</li>
-  </ul>
-
-  <p>Results expected with Adult Redeploy Illinois include reduced prison overcrowding; lowered cost to taxpayers; an end
-    to the expensive vicious cycle of crime and incarceration. </p>
-
-  <p>As of June 2017, Adult Redeploy Illinois has
-    <strong>20 local sites</strong> operating
-    <strong>39 diversion programs</strong> serving
-    <strong>39 counties</strong>. Additionally, ARI funds planning in areas covering
-    <strong>10 additional counties</strong>.</p>
-
-</div>`,
-  data() {
+  template:
+    '<div class="about-redeploy">\n  <h1 class="h2" style="padding-bottom: 12px; border-bottom: 1px solid #ddd;">About Adult Redeploy Illinois</h1>\n  <p>ARI was established by the\n    <a href="http://www.ilga.gov/legislation/publicacts/fulltext.asp?Name=096-0761">Crime Reduction Act</a> (Public Act 96-0761) to provide financial incentives to local jurisdictions for programs that\n    allow diversion of non-violent offenders from state prisons by providing community-based services. Grants are provided\n    to counties, groups of counties, and judicial circuits to increase programming in their areas, in exchange for reducing\n    the number of people they send to the Illinois Department of Corrections.</p>\n\n  <p>The Crime Reduction Act is based on the premise that crime can be reduced and the costs of the criminal justice system\n    can be controlled by understanding and addressing the reasons why people commit crimes. It is also based on the premise\n    that local jurisdictions (judicial circuits or counties) know best what resources are necessary to reduce crime. Rigorous\n    evaluation processes with standardized performance measurements are required to confirm the effectiveness of services\n    in reducing crime. </p>\n\n  <p>ARI is modeled after the successful juvenile Redeploy Illinois program operating since 2005. ARI is an example of the\n    \u201Cperformance incentive funding\u201D best practice, intended to align fiscal and operational responsibility for non-violent\n    offenders at the local level to produce better public safety at a lower cost. ARI draws on concepts of justice reinvestment,\n    such as using data to implement strategies that drive down corrections costs and free up dollars for investment in\n    community-based programs addressing recidivism.</p>\n\n  <p>The goals of ARI are to:</p>\n  <ul>\n    <li>Reduce crime and recidivism in a way that is cost effective for taxpayers.</li>\n    <li>Provide financial incentives to counties or judicial circuits to create effective local-level evidence-based services.</li>\n    <li>Encourage the successful local supervision of eligible offenders and their reintegration into the locality.</li>\n    <li>Perform rigorous data collection and analysis to assess the outcomes of the programs.</li>\n  </ul>\n\n  <p>Results expected with Adult Redeploy Illinois include reduced prison overcrowding; lowered cost to taxpayers; an end\n    to the expensive vicious cycle of crime and incarceration. </p>\n\n  <p>As of June 2017, Adult Redeploy Illinois has\n    <strong>20 local sites</strong> operating\n    <strong>39 diversion programs</strong> serving\n    <strong>39 counties</strong>. Additionally, ARI funds planning in areas covering\n    <strong>10 additional counties</strong>.</p>\n\n</div>',
+  data: function data() {
     return {};
   },
+
   methods: {}
 });
 
-const app = new Vue({
+var app = new Vue({
   el: "#app",
 
-  mounted() {
+  mounted: function mounted() {
     this.initializeChart();
     this.initializeCountySelect();
   },
+
   methods: {
-    stringToKebabCase: function(string) {
+    stringToKebabCase: function stringToKebabCase(string) {
       return string
         .replace(/([a-z])([A-Z])/g, "$1-$2")
         .replace(/\s+/g, "-")
         .toLowerCase();
     },
-    consoleCallback(val) {
+    consoleCallback: function consoleCallback(val) {
       console.dir(JSON.stringify(val));
     },
-    toggleViz() {
+    toggleViz: function toggleViz() {
       this.visibility = !this.visibility;
     },
-    initializeCountySelect() {
+    initializeCountySelect: function initializeCountySelect() {
       // Grab all unique titles
-      let data = _.uniqBy(this.fm.data, function(elem) {
+      var data = _.uniqBy(this.fm.data, function(elem) {
         return JSON.stringify(_.pick(elem, ["title"]));
       });
 
       // Remove unncessary keys
-      data = _.map(data, o => _.omit(o, ["toolText", "value", "displayValue"]));
+      data = _.map(data, function(o) {
+        return _.omit(o, ["toolText", "value", "displayValue"]);
+      });
 
       // Alphabetize
       data = _.orderBy(data, ["title"], ["asc"]);
 
       // Finally, remove any elements that don't contain 'title' keys
-      data = _.filter(data, o => typeof o.title !== "undefined");
+      data = _.filter(data, function(o) {
+        return typeof o.title !== "undefined";
+      });
 
       // for (let [key, val] of Object.entries(data))
       //     val.label = val.title
@@ -89,21 +75,22 @@ const app = new Vue({
 
       return;
     },
-    initializeChart() {
+    initializeChart: function initializeChart() {
       this.renderChart(this, this.setChartEvents(this));
     },
-    getSelection(e) {
-      this.selected = `${e.target.value}`;
+    getSelection: function getSelection(e) {
+      this.selected = "" + e.target.value;
       this.countyMetaData = this.getCountyMetaData("id", this.selected);
       this.loadFactSheet(this.countyMetaData.title);
     },
-    getFirstFactSheet: function() {
+
+    getFirstFactSheet: function getFirstFactSheet() {
       this.selected = this.fm.data[0].id;
       this.countyMetaData = this.getCountyMetaData("id", this.selected);
       this.loadFactSheet(this.countyMetaData.title);
     },
 
-    getCountyMetaData: function(key, value) {
+    getCountyMetaData: function getCountyMetaData(key, value) {
       var myObj;
       if (key === "title") {
         myObj = _.find(this.fm.data, {
@@ -117,34 +104,37 @@ const app = new Vue({
       }
       return myObj;
     },
-    loadFactSheet: function(t) {
+    loadFactSheet: function loadFactSheet(t) {
+      var _this = this;
+
       this.visibility = true;
       //var siteUrl = `https://adultredeployil.us/sites/` + this.stringToKebabCase(this.countyMetaData.title)
-      var siteUrl = `https://adultredeployil.us/sites/site-001`;
+      var siteUrl = "https://adultredeployil.us/sites/site-001";
       console.log("Site url for factsheet: ", siteUrl);
-      this.countyMetaData.factSheet = `<div class="text-center" style="margin-top: 30px"></div>`;
+      this.countyMetaData.factSheet =
+        '<div class="text-center" style="margin-top: 30px"></div>';
       axios
         .get(siteUrl)
-        .then(response => {
-          this.countyMetaData.factSheet = response.data;
-          this.$forceUpdate();
+        .then(function(response) {
+          _this.countyMetaData.factSheet = response.data;
+          _this.$forceUpdate();
           //console.log(response.data)
         })
-        .catch(e => {
+        .catch(function(e) {
           console.log("Error: ", e);
         });
     },
-    renderFactSheet: function(str) {
+    renderFactSheet: function renderFactSheet(str) {
       this.countyMetaData.factSheet = str;
       $(".panel-text").html(str);
       this.$forceUpdate();
     },
-    setChartEvents: function(vm) {
-      const fusionEventsObj = {
-        entityClick: function(evt, data) {
+    setChartEvents: function setChartEvents(vm) {
+      var fusionEventsObj = {
+        entityClick: function entityClick(evt, data) {
           vm.countyId = data.id;
 
-          let metaData = vm.getCountyMetaData("id", vm.countyId);
+          var metaData = vm.getCountyMetaData("id", vm.countyId);
           //console.log(metaData.displayValue)
 
           if (metaData.displayValue != "") {
@@ -158,7 +148,7 @@ const app = new Vue({
       };
       return fusionEventsObj;
     },
-    renderChart: function(vm, fusionEventsObj) {
+    renderChart: function renderChart(vm, fusionEventsObj) {
       FusionCharts.ready(function() {
         this.ariMap = new FusionCharts({
           type: "illinois",
@@ -175,7 +165,9 @@ const app = new Vue({
       });
     }
   },
-  data() {
+  data: function data() {
+    var _chart;
+
     return {
       selected: "",
       selected2: "",
@@ -186,7 +178,7 @@ const app = new Vue({
       selectData: [],
       testData: [],
       fm: {
-        chart: {
+        chart: ((_chart = {
           caption: "Adult Redeploy Illinois SFY 2017",
           subCaption: "Click county to display fact sheet",
           captionFontSize: "18",
@@ -215,10 +207,11 @@ const app = new Vue({
           legendItemFontColor: "#333333",
           connectorColor: "#aaaaaa",
           fillColor: "#ffffff",
-          showLegend: "1",
-          legendPosition: "bottom",
-          baseFontColor: "#aaaaaa"
-        },
+          showLegend: "1"
+        }),
+        _defineProperty(_chart, "legendPosition", "bottom"),
+        _defineProperty(_chart, "baseFontColor", "#aaaaaa"),
+        _chart),
         colorrange: {
           color: [
             {

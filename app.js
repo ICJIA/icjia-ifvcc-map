@@ -19,7 +19,12 @@ Vue.use(VueFusionCharts);
 Vue.component("about", {
   // Initially used template literals, but ended up running through Babel for IE11.
   template:
-    '<div class="about-redeploy">\n  <h1 class="h2" style="padding-bottom: 12px; border-bottom: 1px solid #ddd;">About Adult Redeploy Illinois</h1>\n  <p>ARI was established by the\n    <a href="http://www.ilga.gov/legislation/publicacts/fulltext.asp?Name=096-0761">Crime Reduction Act</a> (Public Act 96-0761) to provide financial incentives to local jurisdictions for programs that\n    allow diversion of non-violent offenders from state prisons by providing community-based services. Grants are provided\n    to counties, groups of counties, and judicial circuits to increase programming in their areas, in exchange for reducing\n    the number of people they send to the Illinois Department of Corrections.</p>\n\n  <p>The Crime Reduction Act is based on the premise that crime can be reduced and the costs of the criminal justice system\n    can be controlled by understanding and addressing the reasons why people commit crimes. It is also based on the premise\n    that local jurisdictions (judicial circuits or counties) know best what resources are necessary to reduce crime. Rigorous\n    evaluation processes with standardized performance measurements are required to confirm the effectiveness of services\n    in reducing crime. </p>\n\n  <p>ARI is modeled after the successful juvenile Redeploy Illinois program operating since 2005. ARI is an example of the\n    \u201Cperformance incentive funding\u201D best practice, intended to align fiscal and operational responsibility for non-violent\n    offenders at the local level to produce better public safety at a lower cost. ARI draws on concepts of justice reinvestment,\n    such as using data to implement strategies that drive down corrections costs and free up dollars for investment in\n    community-based programs addressing recidivism.</p>\n\n  <p>The goals of ARI are to:</p>\n  <ul>\n    <li>Reduce crime and recidivism in a way that is cost effective for taxpayers.</li>\n    <li>Provide financial incentives to counties or judicial circuits to create effective local-level evidence-based services.</li>\n    <li>Encourage the successful local supervision of eligible offenders and their reintegration into the locality.</li>\n    <li>Perform rigorous data collection and analysis to assess the outcomes of the programs.</li>\n  </ul>\n\n  <p>Results expected with Adult Redeploy Illinois include reduced prison overcrowding; lowered cost to taxpayers; an end\n    to the expensive vicious cycle of crime and incarceration. </p>\n\n  <p>As of June 2017, Adult Redeploy Illinois has\n    <strong>20 local sites</strong> operating\n    <strong>39 diversion programs</strong> serving\n    <strong>39 counties</strong>. Additionally, ARI funds planning in areas covering\n    <strong>10 additional counties</strong>.</p>\n\n</div>'
+    '<div class="about-redeploy">\n  <h1 class="h2" style="padding-bottom: 12px; border-bottom: 1px solid #ddd;">About Adult Redeploy Illinois</h1>\n  <p>ARI was established by the\n    <a href="http://www.ilga.gov/legislation/publicacts/fulltext.asp?Name=096-0761">Crime Reduction Act</a> (Public Act 96-0761) to provide financial incentives to local jurisdictions for programs that\n    allow diversion of non-violent offenders from state prisons by providing community-based services. Grants are provided\n    to counties, groups of counties, and judicial circuits to increase programming in their areas, in exchange for reducing\n    the number of people they send to the Illinois Department of Corrections.</p>\n\n  <p>The Crime Reduction Act is based on the premise that crime can be reduced and the costs of the criminal justice system\n    can be controlled by understanding and addressing the reasons why people commit crimes. It is also based on the premise\n    that local jurisdictions (judicial circuits or counties) know best what resources are necessary to reduce crime. Rigorous\n    evaluation processes with standardized performance measurements are required to confirm the effectiveness of services\n    in reducing crime. </p>\n\n  <p>ARI is modeled after the successful juvenile Redeploy Illinois program operating since 2005. ARI is an example of the\n    \u201Cperformance incentive funding\u201D best practice, intended to align fiscal and operational responsibility for non-violent\n    offenders at the local level to produce better public safety at a lower cost. ARI draws on concepts of justice reinvestment,\n    such as using data to implement strategies that drive down corrections costs and free up dollars for investment in\n    community-based programs addressing recidivism.</p>\n\n  <p>The goals of ARI are to:</p>\n  <ul>\n    <li>Reduce crime and recidivism in a way that is cost effective for taxpayers.</li>\n    <li>Provide financial incentives to counties or judicial circuits to create effective local-level evidence-based services.</li>\n    <li>Encourage the successful local supervision of eligible offenders and their reintegration into the locality.</li>\n    <li>Perform rigorous data collection and analysis to assess the outcomes of the programs.</li>\n  </ul>\n\n  <p>Results expected with Adult Redeploy Illinois include reduced prison overcrowding; lowered cost to taxpayers; an end\n    to the expensive vicious cycle of crime and incarceration. </p>\n\n  <p>As of June 2017, Adult Redeploy Illinois has\n    <strong>20 local sites</strong> operating\n    <strong>39 diversion programs</strong> serving\n    <strong>39 counties</strong>. Additionally, ARI funds planning in areas covering\n    <strong>10 additional counties</strong>.</p>\n\n</div>',
+  data: function data() {
+    return {};
+  },
+
+  methods: {}
 });
 
 var app = new Vue({
@@ -80,6 +85,12 @@ var app = new Vue({
       this.loadFactSheet(this.countyMetaData.title);
     },
 
+    getFirstFactSheet: function getFirstFactSheet() {
+      this.selected = this.fm.data[0].id;
+      this.countyMetaData = this.getCountyMetaData("id", this.selected);
+      this.loadFactSheet(this.countyMetaData.title);
+    },
+
     getCountyMetaData: function getCountyMetaData(key, value) {
       var myObj;
       if (key === "title") {
@@ -102,7 +113,7 @@ var app = new Vue({
       var siteUrl = "https://adultredeployil.us/sites/site-001";
       console.log("Site url for factsheet: ", siteUrl);
       this.countyMetaData.factSheet =
-        '<div class="text-center" style="margin-top: 30px">Loading... <img src="img/spinner.svg" /></div>';
+        '<div class="text-center" style="margin-top: 30px"></div>';
       axios
         .get(siteUrl)
         .then(function(response) {
@@ -116,10 +127,11 @@ var app = new Vue({
     },
     renderFactSheet: function renderFactSheet(str) {
       this.countyMetaData.factSheet = str;
-      //$(".panel-text").html(str);
+      $(".panel-text").html(str);
       this.$forceUpdate();
     },
-    setChartEvents: function setChartEvents(_this) {
+    setChartEvents: function setChartEvents(vm) {
+      var _this = this;
       var fusionEventsObj = {
         entityClick: function entityClick(evt, data) {
           _this.countyId = data.id;
@@ -137,7 +149,7 @@ var app = new Vue({
       };
       return fusionEventsObj;
     },
-    renderChart: function renderChart(_this, fusionEventsObj) {
+    renderChart: function renderChart(context, fusionEventsObj) {
       FusionCharts.ready(function() {
         this.ariMap = new FusionCharts({
           type: "illinois",
@@ -146,9 +158,9 @@ var app = new Vue({
           height: "700",
           events: fusionEventsObj,
           dataSource: {
-            chart: _this.fm.chart,
-            colorrange: _this.fm.colorrange,
-            data: _this.fm.data
+            chart: context.fm.chart,
+            colorrange: context.fm.colorrange,
+            data: context.fm.data
           }
         }).render();
       });
@@ -159,10 +171,12 @@ var app = new Vue({
 
     return {
       selected: "",
+      selected2: "",
       countyId: "",
       visibility: false,
       countyMetaData: {},
       selectData: [],
+      testData: [],
       fm: {
         chart: ((_chart = {
           caption: "Adult Redeploy Illinois SFY 2017",
